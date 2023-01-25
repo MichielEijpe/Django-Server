@@ -7,13 +7,27 @@ on:
     branches: [ "main" ]
 
 jobs:
+  test_env:
+    environment: TEST_SECRET
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        
+    - name: Test env vars for python
+      run: python -c 'import os;print(os.environ)'
+      env:
+        ENV_SECRET: ${{ secrets.SECRET_KEY }} 
+  
   build:
 
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
       matrix:
-        python-version: [3.7, 3.8, 3.9]
+        python-version: 3.9
 
     steps:
     - uses: actions/checkout@v3
